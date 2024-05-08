@@ -1,0 +1,6 @@
+dataset:
+  test_idx: 2
+  valid_partial_ratio: 1.0
+path: "OUTPUT_FOLDER_PATH" # eg. "2000-01-01/01-01-01"
+mode: "best" # best or last
+batch_size: 512
