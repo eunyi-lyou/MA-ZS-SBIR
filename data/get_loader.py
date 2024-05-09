@@ -9,6 +9,12 @@ import torch
 from torch.utils.data import ConcatDataset, DataLoader
 from transformers import AutoProcessor
 
+data_dir_paths = [
+    "tuberlin_dir_path",
+    "quickdraw_dir_path",
+    "sketchy_dir_path",
+]
+
 class CONCAT_DATASET:
     
     def __init__(self, args, ds_idx = None):
@@ -26,7 +32,7 @@ class CONCAT_DATASET:
         
         tmp_datasets = []
         for i in self.ds_idx:
-            tmp_datasets.append(fn_list[i](split=split, cls_list=cls_lists[i]))
+            tmp_datasets.append(fn_list[i](split=split, cls_list=cls_lists[i], data_dir=data_dir_paths[i]))
         
         self.datasets = tmp_datasets
         

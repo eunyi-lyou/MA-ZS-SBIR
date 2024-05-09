@@ -7,7 +7,7 @@ from torch.utils.data import Dataset
 
 from PIL import Image
 
-def get_sketchy_dataset(split:str, cls_list, need_transform=False):
+def get_sketchy_dataset(split:str, cls_list, data_dir):
     '''
     split: 'train', 'val', 'test'
     '''
@@ -18,12 +18,13 @@ def get_sketchy_dataset(split:str, cls_list, need_transform=False):
     ann_file_path = pathlib.Path(__file__).parent.resolve()
     ann_file = ann_file_path / 'test_sketchy.csv' if split=='test' else ann_file_path / 'train_sketchy.csv'
     
-    return SketchyDataset(ann_file, cls_list)
+    return SketchyDataset(ann_file, cls_list, data_dir)
 
 class SketchyDataset(Dataset):
     
-    def __init__(self, ann_file, cls_list):
+    def __init__(self, ann_file, cls_list, data_dir):
         self.cls_list = cls_list
+        self.data_dir = data_dir
         self.ann = self._filter_cls(pd.read_csv(ann_file))
         print(f'[INFO] {len(self.ann)} number of image-label pairs({len(cls_list)} classes) loaded')
     
@@ -35,8 +36,7 @@ class SketchyDataset(Dataset):
         sample = self.ann.iloc[[index]]
         
         text = sample.text.values[0]
-        img_path = sample.img_path.values[0]
-        
+        img_path = pathlib.Path(self.data_dir, sample.img_path.values[0])
         image = Image.open(img_path).convert('RGB')
         
         output = {}
